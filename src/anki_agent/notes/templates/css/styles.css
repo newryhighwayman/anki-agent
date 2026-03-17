@@ -1,0 +1,25 @@
+.word { 
+    font-size: 24px;
+}
+
+.ipa {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold; 
+}
+
+.example {
+    color: #666;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.hint {
+    color: #999;
+    font-size: 14px;
+    margin-top: 4px; 
+}
+
+hr {
+    margin: 12px 0;
+}
