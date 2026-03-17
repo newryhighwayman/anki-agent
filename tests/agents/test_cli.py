@@ -88,17 +88,27 @@ def test_vocab_prompts_on_updatable(cli_env):
 def test_init_creates_settings_file(tmp_path):
     settings_file = tmp_path / "settings.json"
 
+    select_answers = iter(["English", "Irish", "u"])
+
+    def mock_select(*args, **kwargs):
+        mock_question = MagicMock()
+        mock_question.ask.return_value = next(select_answers)
+
+        return mock_question
+
     with (
         patch("anki_agent.agents.cli.SETTINGS_FILE", settings_file),
         patch("anki_agent.agents.cli.AnkiClient") as mock_client_cls,
         patch("anki_agent.agents.cli.ensure_models_exist"),
+        patch("anki_agent.agents.cli.questionary") as mock_q,
     ):
+        mock_q.select.side_effect = mock_select
         mock_client_cls.return_value = MagicMock()
         runner = CliRunner()
         result = runner.invoke(
             main,
             ["init"],
-            input="\nIrish\nu\n\n",
+            input="\n",
         )
 
     assert result.exit_code == 0, result.output

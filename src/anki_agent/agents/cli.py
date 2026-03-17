@@ -4,6 +4,7 @@ import inspect
 import json
 
 import click
+import questionary
 
 from anki_agent.audio import AUDIO_PROVIDERS, get_audio_provider
 from anki_agent.audio.provider import AudioProvider
@@ -37,15 +38,15 @@ def init() -> None:
     click.echo("Welcome to AnkiAgent!")
 
     language_names = [lang.name for lang in LANGUAGES]
-    source_language = click.prompt(
-        "\nWhat is your source language?",
-        type=click.Choice(language_names),
+    source_language = questionary.select(
+        "What is your source language?",
+        choices=language_names,
         default="English",
-    )
-    target_language = click.prompt(
-        "\nWhat language do you want to learn?",
-        type=click.Choice(language_names),
-    )
+    ).ask()
+    target_language = questionary.select(
+        "What language do you want to learn?",
+        choices=language_names,
+    ).ask()
 
     language = get_language(target_language)
     available_providers = language.audio_providers
@@ -53,11 +54,11 @@ def init() -> None:
         audio_provider = available_providers[0]
         click.echo(f"Audio provider: {audio_provider} (only available provider)")
     else:
-        audio_provider = click.prompt(
+        audio_provider = questionary.select(
             "Audio provider",
-            type=click.Choice(list(available_providers)),
+            choices=list(available_providers),
             default=available_providers[0],
-        )
+        ).ask()
 
     audio_options = {}
     provider_cls = AUDIO_PROVIDERS[audio_provider]
@@ -75,10 +76,10 @@ def init() -> None:
         if choices:
             hint = ", ".join(f"{k} ({v})" for k, v in choices.items())
             click.echo(f"  Options: {hint}")
-            value = click.prompt(
+            value = questionary.select(
                 param_name.replace("_", " ").title(),
-                type=click.Choice(list(choices.keys())),
-            )
+                choices=list(choices.keys()),
+            ).ask()
             audio_options[param_name] = value
         else:
             audio_options[param_name] = click.prompt(

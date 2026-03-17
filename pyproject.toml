@@ -12,6 +12,7 @@ dependencies = [
     "beautifulsoup4",
     "ddgs",
     "anthropic",
+    "questionary",
 ]
 
 [project.scripts]
