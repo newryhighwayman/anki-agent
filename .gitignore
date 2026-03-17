@@ -11,3 +11,4 @@ wheels/
 
 # Claude
 .claude/settings*
+.claude/plans
