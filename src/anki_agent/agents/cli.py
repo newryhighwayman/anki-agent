@@ -85,11 +85,14 @@ def init() -> None:
                 param_name.replace("_", " ").title()
             )
 
-    deck = click.prompt("Deck name", default=language.native_name)
+    deck = click.prompt(
+        "What do you want to call your deck?",
+        default=language.native_name,
+    )
 
     client = AnkiClient()
     client.create_deck(deck)
-    click.echo(f"Deck '{deck}' successfully created in Anki.")
+    click.echo(f"\nDeck '{deck}' successfully created in Anki.")
     ensure_models_exist(client)
 
     SETTINGS_FILE.parent.mkdir(parents=True, exist_ok=True)
